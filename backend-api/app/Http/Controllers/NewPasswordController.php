@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
+
+class NewPasswordController extends Controller
+{
+    // 1. Send the Link
+    public function forgotPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        // We send the link using the default Laravel notification, 
+        // which uses the URL we defined in AppServiceProvider.
+        $status = Password::sendResetLink($request->only('email'));
+
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['status' => __($status)])
+            : response()->json(['email' => __($status)], 400);
+    }
+
+    // 2. Reset the Password
+    public function reset(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:4|confirmed', // expects password_confirmation field
+        ]);
+
+        $status = Password::reset($request->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+            
+            $user->save();
+            event(new PasswordReset($user));
+        });
+
+        return $status === Password::PASSWORD_RESET
+            ? response()->json(['status' => __($status)])
+            : response()->json(['email' => __($status)], 400);
+    }
+}
