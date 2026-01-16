@@ -31,12 +31,10 @@ export default function UserShips() {
     const { notifySuccess, notifyError } = useNotification();
     const navigate = useNavigate();
 
-    // Pagination & Animation State
     const [currentPage, setCurrentPage] = useState(1);
     const [direction, setDirection] = useState(0); 
     const itemsPerPage = 5;
 
-    // --- 1. ADD IMAGE HELPER HERE ---
     const getShipImage = (name) => {
         if (!name) return 'https://static.wikia.nocookie.net/elite-dangerous/images/8/8d/Elite-Dangerous-Ship-Squadron.png';
         if (name.includes('Anaconda')) return 'https://static.wikia.nocookie.net/elite-dangerous/images/a/a4/Anaconda.png';
@@ -141,7 +139,6 @@ export default function UserShips() {
                                     key={ship.id}
                                     className="bg-zinc-800 rounded-xl shadow-lg border border-zinc-700 hover:border-purple-500/50 transition relative group flex flex-col overflow-hidden"
                                 >
-                                    {/* --- 2. ADDED IMAGE SECTION --- */}
                                     <div className="h-32 bg-black/50 relative">
                                         <img 
                                             src={getShipImage(ship.ship_model.name)} 
@@ -150,7 +147,7 @@ export default function UserShips() {
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-zinc-800 via-transparent to-transparent"></div>
                                         
-                                        {/* Sell Button (Moved inside image for cleaner look) */}
+                                        {/* Sell Button*/}
                                         <button
                                             onClick={() => handleDelete(ship.id, ship.ship_model.name)}
                                             className="absolute top-2 right-2 text-zinc-400 hover:text-red-500 bg-black/50 rounded-full p-2 backdrop-blur-sm transition"

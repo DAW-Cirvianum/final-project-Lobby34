@@ -16,18 +16,17 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name' => 'required|string|unique:users,name',
             'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed' // Expects password_confirmation field
+            'password' => 'required|string|confirmed'
         ]);
 
         // Assign default role (e.g., 'user')
-        // Ensure you run your Role seeder first so ID 2 exists, or look it up by name
         $userRole = Role::where('name', 'user')->first(); 
         
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => Hash::make($fields['password']),
-            'role_id' => $userRole ? $userRole->id : 1 // Fallback or strict assignment
+            'role_id' => $userRole ? $userRole->id : 1
         ]);
 
         $token = $user->createToken('EliteAppToken')->plainTextToken;
@@ -38,11 +37,10 @@ class AuthController extends Controller
         ], 201);
     }
 
-    // LOGIN (Java Case: Main.java authentication loop)
     public function login(Request $request)
     {
         $fields = $request->validate([
-            'login' => 'required|string', // Can be name OR email
+            'login' => 'required|string',
             'password' => 'required|string'
         ]);
 
@@ -52,7 +50,7 @@ class AuthController extends Controller
         // Attempt login
         if (!Auth::attempt([$loginType => $fields['login'], 'password' => $fields['password']])) {
             return response()->json([
-                'message' => 'User or Password Incorrect' // Matching your Java error message
+                'message' => 'User or Password Incorrect'
             ], 401);
         }
 
@@ -65,7 +63,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-    // LOGOUT (Java Case 6 & 7)
     public function logout(Request $request)
     {
         // Delete the token that was used to authenticate the current request

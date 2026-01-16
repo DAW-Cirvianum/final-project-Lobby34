@@ -9,7 +9,6 @@ class ShipModel extends Model
 {
     use HasFactory;
 
-    // 1. ADD THIS ARRAY TO FIX THE ERROR
     protected $fillable = [
         'name',
         'hull_mass',

@@ -19,7 +19,7 @@ export default function Navbar() {
             <div className="container mx-auto px-6 py-4 flex justify-between items-center">
                 
                 {/* Logo */}
-                <Link to="/" className="flex items-center gap-2 text-2xl font-bold tracking-tighter hover:text-purple-400 transition">
+                <Link to="/ships" className="flex items-center gap-2 text-2xl font-bold tracking-tighter hover:text-purple-400 transition">
                     <FaSpaceShuttle className="text-purple-500" />
                     <span>EliteManager</span>
                 </Link>
@@ -46,7 +46,7 @@ export default function Navbar() {
                         </>
                     ) : (
                         <>
-                            {/* --- UPDATED LINKS HERE (White Text) --- */}
+                            {/* LINKS */}
                             <Link to="/login" className="text-gray-300 hover:text-white transition font-medium">
                                 Login
                             </Link>

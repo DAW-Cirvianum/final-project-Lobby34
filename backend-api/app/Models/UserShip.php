@@ -30,7 +30,6 @@ class UserShip extends Model
     }
 
     public function calculateTotalMass() {
-    // Sum Hull Mass + FSD Mass + All Modules Mass
     $mass = $this->shipModel->hull_mass + $this->fsd->mass;
     
     foreach($this->modules as $module) {
@@ -38,12 +37,12 @@ class UserShip extends Model
     }
     
     $this->total_mass = $mass;
-    $this->save(); // Save to DB
+    $this->save();
     return $mass;
 }
 
 public function calculateJumpRange() {
-    $this->calculateTotalMass(); // Ensure mass is up to date
+    $this->calculateTotalMass();
     
     $fsd = $this->fsd;
     $totalMass = $this->total_mass;

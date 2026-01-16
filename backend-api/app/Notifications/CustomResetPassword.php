@@ -12,7 +12,6 @@ class CustomResetPassword extends Notification
 
     public $token;
 
-    // 1. Accept the token in the constructor
     public function __construct($token)
     {
         $this->token = $token;
@@ -23,10 +22,8 @@ class CustomResetPassword extends Notification
         return ['mail'];
     }
 
-    // 2. Customize the email here
     public function toMail($notifiable)
     {
-        // Build the Frontend Link
         $frontendUrl = env('FRONTEND_URL', 'http://localhost:5174');
         $resetUrl = "{$frontendUrl}/reset-password?token={$this->token}&email={$notifiable->getEmailForPasswordReset()}";
 

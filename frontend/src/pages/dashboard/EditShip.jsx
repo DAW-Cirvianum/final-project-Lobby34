@@ -14,14 +14,13 @@ export default function EditShip() {
     const [availableFSDs, setAvailableFSDs] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // STATE TO TRACK CHANGES
     const [selectedFsd, setSelectedFsd] = useState('');
     const [selectedModules, setSelectedModules] = useState({}); // { slot_id: module_id }
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                // 1. Get Data
+                // Get Data
                 const [shipRes, modsRes] = await Promise.all([
                     api.get(`/my-ships/${id}`),
                     api.get('/modules')
@@ -32,7 +31,7 @@ export default function EditShip() {
                 setAvailableModules(modsRes.data.modules);
                 setAvailableFSDs(modsRes.data.fsds);
 
-                // 2. Initialize Selection State with CURRENT parts
+                // Initialize Selection State with CURRENT parts
                 setSelectedFsd(shipData.fsd_id);
                 
                 // Convert array of modules into an Object Map
@@ -124,7 +123,7 @@ export default function EditShip() {
             {/* RIGHT: Module Slots */}
             <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="w-full lg:w-2/3 space-y-6">
                 
-                {/* 1. Core Internal: Frame Shift Drive */}
+                {/* Core Internal: Frame Shift Drive */}
                 <div className="bg-zinc-800 p-6 rounded-lg border border-zinc-700 shadow-md">
                     <h3 className="text-lg font-bold mb-4 text-gray-100 flex items-center justify-between">
                         <span>Frame Shift Drive (FSD)</span>

@@ -7,13 +7,12 @@ export default function Register() {
     const [formData, setFormData] = useState({ name: '', email: '', password: '', password_confirmation: '' });
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { login } = useAuth(); // We auto-login after register
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await api.post('/register', formData);
-            // Auto login after success
             await login(formData.name, formData.password);
             navigate('/dashboard/userships');
         } catch (err) {

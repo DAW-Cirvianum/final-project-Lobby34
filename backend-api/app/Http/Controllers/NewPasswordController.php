@@ -14,9 +14,6 @@ class NewPasswordController extends Controller
     public function forgotPassword(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-
-        // We send the link using the default Laravel notification, 
-        // which uses the URL we defined in AppServiceProvider.
         $status = Password::sendResetLink($request->only('email'));
 
         return $status === Password::RESET_LINK_SENT
@@ -30,7 +27,7 @@ class NewPasswordController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:4|confirmed', // expects password_confirmation field
+            'password' => 'required|min:4|confirmed',
         ]);
 
         $status = Password::reset($request->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {

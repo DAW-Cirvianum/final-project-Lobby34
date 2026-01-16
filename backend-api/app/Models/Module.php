@@ -13,10 +13,8 @@ class Module extends Model
         'class_number',
         'rating_character',
         'mass',
-        'slot_type', // 1=Hardpoint, 2=PowerPlant, 3=Thrusters, etc.
+        'slot_type',
     ];
-
-    // Many ships can have this module installed
     public function userShips()
     {
         return $this->belongsToMany(UserShip::class, 'user_ship_modules')

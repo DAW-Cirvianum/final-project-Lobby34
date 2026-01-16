@@ -13,7 +13,7 @@ class UserShipController extends Controller
     {
         // Return only the logged-in user's ships
         $ships = UserShip::where('user_id', Auth::id())
-            ->with(['shipModel', 'fsd']) // Load relations
+            ->with(['shipModel', 'fsd'])
             ->get();
 
         return response()->json($ships);
@@ -31,7 +31,7 @@ class UserShipController extends Controller
             'user_id' => Auth::id(),
             'ship_model_id' => $request->ship_model_id,
             'fsd_id' => $request->fsd_id,
-            'total_mass' => 0 // Will be calculated
+            'total_mass' => 0 
         ]);
 
         // Logic to calculate mass immediately after creation
@@ -70,16 +70,12 @@ class UserShipController extends Controller
             $ship->save();
         }
 
-        // 3. Update Modules (The "Re-fit" logic)
+        // 3. Update Modules
         if ($request->has('modules')) {
-            // 'modules' should be an array like: [ { "module_id": 10, "slot": 2 }, ... ]
-
-            // Remove all old modules to prevent duplicates/conflicts
             $ship->modules()->detach();
 
             // Re-install new modules
             foreach ($request->modules as $moduleData) {
-                // Skip empty slots
                 if (!$moduleData['module_id'])
                     continue;
 
@@ -88,8 +84,6 @@ class UserShipController extends Controller
                 ]);
             }
         }
-
-        // 4. Recalculate Physics
         $ship->calculateTotalMass();
 
         return response()->json([
@@ -101,7 +95,7 @@ class UserShipController extends Controller
     // REMOVE SHIP
     public function destroy($id)
     {
-        // 1. Find the ship (Ensure it belongs to the logged-in user)
+        // 1. Find the ship
         $ship = \App\Models\UserShip::where('user_id', \Illuminate\Support\Facades\Auth::id())
             ->findOrFail($id);
 

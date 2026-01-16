@@ -31,7 +31,7 @@ export default function CreateShip() {
         try {
             await api.post('/ship-models', formData);
             notifySuccess(`Prototype ${formData.name} registered successfully!`);
-            navigate('/dashboard/buy-ship'); // Go to showroom to see it
+            navigate('/dashboard/buy-ship');
         } catch (err) {
             console.error(err);
             notifyError(err.response?.data?.message || "Failed to create ship model.");

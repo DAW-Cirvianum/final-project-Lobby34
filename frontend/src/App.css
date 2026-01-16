@@ -1,14 +1,11 @@
-/* --- THE FIX IS HERE --- */
-/* We reset the root container to allow full width */
 #root {
   width: 100%;
-  max-width: none; /* Let it expand */
+  max-width: none;
   margin: 0;
   padding: 0;
-  text-align: left; /* Don't center text by default */
+  text-align: left;
 }
 
-/* Kept your animations and styles below */
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -6,7 +6,6 @@ export default function ResetPassword() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     
-    // Grab token and email from URL (?token=...&email=...)
     const token = searchParams.get('token');
     const emailParam = searchParams.get('email');
 
@@ -28,7 +27,7 @@ export default function ResetPassword() {
                 password_confirmation: passwordConfirmation
             });
             setStatus(res.data.status);
-            setTimeout(() => navigate('/login'), 3000); // Redirect after 3s
+            setTimeout(() => navigate('/login'), 3000);
         } catch (err) {
             setError(err.response?.data?.message || "Reset failed. Token may be expired.");
         }

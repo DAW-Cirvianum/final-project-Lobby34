@@ -5,12 +5,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ShipManageController;
 
-// 1. Default Welcome
 Route::get('/', function () {
     return view('welcome');
 });
 
-// --- AUTHENTICATION ROUTES ---
 
 // Show the Login Form
 Route::get('/login', function () {

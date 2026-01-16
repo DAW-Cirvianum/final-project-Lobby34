@@ -7,8 +7,6 @@ export default function BuyShipModal({ onClose, onPurchase }) {
     const [models, setModels] = useState([]);
     const [fsds, setFsds] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    // Form State
     const [selectedModelId, setSelectedModelId] = useState('');
     const [selectedFsdId, setSelectedFsdId] = useState('');
 
@@ -16,8 +14,8 @@ export default function BuyShipModal({ onClose, onPurchase }) {
         const fetchData = async () => {
             try {
                 const [modelsRes, modulesRes] = await Promise.all([
-                    api.get('/ship-models'), // Public endpoint
-                    api.get('/modules')      // Protected endpoint
+                    api.get('/ship-models'),
+                    api.get('/modules')
                 ]);
                 setModels(modelsRes.data);
                 setFsds(modulesRes.data.fsds);
@@ -63,7 +61,7 @@ export default function BuyShipModal({ onClose, onPurchase }) {
                         <p className="text-center text-gray-400">Contacting Shipyard...</p>
                     ) : (
                         <>
-                            {/* 1. Select Chassis */}
+                            {/*Select Chassis */}
                             <div>
                                 <label className="block text-sm text-gray-400 mb-2">Select Ship Model</label>
                                 <select 
@@ -71,7 +69,7 @@ export default function BuyShipModal({ onClose, onPurchase }) {
                                     value={selectedModelId}
                                     onChange={(e) => {
                                         setSelectedModelId(e.target.value);
-                                        setSelectedFsdId(''); // Reset FSD when ship changes
+                                        setSelectedFsdId('');
                                     }}
                                 >
                                     <option value="" disabled>-- Choose a Chassis --</option>
@@ -81,7 +79,7 @@ export default function BuyShipModal({ onClose, onPurchase }) {
                                 </select>
                             </div>
 
-                            {/* 2. Select FSD (Only shows if model selected) */}
+                            {/*Select FSD (Only shows if model selected) */}
                             {selectedModel && (
                                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
                                     <label className="block text-sm text-gray-400 mb-2">
@@ -97,7 +95,7 @@ export default function BuyShipModal({ onClose, onPurchase }) {
                                     >
                                         <option value="" disabled>-- Install FSD --</option>
                                         {fsds
-                                            .filter(fsd => fsd.class_number <= selectedModel.max_fsd) // Filter valid sizes
+                                            .filter(fsd => fsd.class_number <= selectedModel.max_fsd)
                                             .map(fsd => (
                                                 <option key={fsd.id} value={fsd.id}>
                                                     Class {fsd.class_number}{fsd.rating_character} (Range Opt: {fsd.optimal_mass})
