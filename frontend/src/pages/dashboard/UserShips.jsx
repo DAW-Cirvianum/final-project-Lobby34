@@ -169,6 +169,15 @@ export default function UserShips() {
                                                 <span>Total Mass:</span> 
                                                 <span className="font-mono text-purple-300">{ship.total_mass}T</span>
                                             </p>
+                                            
+                                            {/* ADDED: Jump Range Display */}
+                                            <p className="flex justify-between border-b border-zinc-700 pb-1 mb-1">
+                                                <span>Jump Range:</span> 
+                                                <span className="font-mono text-cyan-400">
+                                                    {ship.jump_range ? parseFloat(ship.jump_range).toFixed(2) : 0} Ly
+                                                </span>
+                                            </p>
+
                                             <p className="flex justify-between">
                                                 <span>FSD:</span> 
                                                 <span className="font-mono text-gray-300">{ship.fsd.class_number}{ship.fsd.rating_character}</span>
