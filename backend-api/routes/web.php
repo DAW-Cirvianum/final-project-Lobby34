@@ -9,54 +9,62 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::prefix('admin')->group(function () {
 
-// Show the Login Form
-Route::get('/login', function () {
-    if (Auth::check()) {
-        return redirect()->route('admin.ships.index');
-    }
-    return view('admin.login');
-})->name('login');
+    Route::get('/login', function () {
+        if (Auth::check()) {
+            if (Auth::user()->role_id === 1) {
+                return redirect()->route('admin.ships.index');
+            } else {
+                Auth::logout();
+            }
+        }
+        return view('admin.login');
+    })->name('login'); 
 
-// Process the Login Form
-Route::post('/login', function (Request $request) {
-    // Validate input
-    $credentials = $request->validate([
-        'login' => 'required',
-        'password' => 'required'
-    ]);
+    Route::post('/login', function (Request $request) {
+        $credentials = $request->validate([
+            'login' => 'required',
+            'password' => 'required'
+        ]);
 
-    // Determine if input is email or username
-    $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
-    // Attempt to log in
-    if (Auth::attempt([$loginType => $request->login, 'password' => $request->password])) {
-        $request->session()->regenerate();
-        return redirect()->intended('/admin/ships');
-    }
+        if (Auth::attempt([$loginType => $request->login, 'password' => $request->password])) {
+            
+            $user = Auth::user();
 
-    // If failed, go back with error
-    return back()->withErrors([
-        'login' => 'Invalid credentials provided.',
-    ]);
-})->name('login.post');
+            if ($user->role_id === 1) {
+                $request->session()->regenerate();
+                return redirect()->intended('/admin/ships');
+            }
 
-// Logout Route
-Route::post('/logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return redirect('/login');
-})->name('logout');
+            Auth::logout();
+            return back()->withErrors([
+                'login' => 'Access Denied: You do not have administrator privileges.',
+            ]);
+        }
+
+        return back()->withErrors([
+            'login' => 'Invalid credentials provided.',
+        ]);
+    })->name('admin.login.post');
+
+    Route::post('/logout', function (Request $request) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/admin/login');
+    })->name('admin.logout');
 
 
-// --- ADMIN BACKEND ROUTES (Protected) ---
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    
-    // Ship Manager
-    Route::get('/ships', [ShipManageController::class, 'index'])->name('ships.index');
-    Route::get('/ships/{id}/edit', [ShipManageController::class, 'edit'])->name('ships.edit');
-    Route::put('/ships/{id}', [ShipManageController::class, 'update'])->name('ships.update');
-    Route::delete('/ships/{id}', [ShipManageController::class, 'destroy'])->name('ships.destroy');
+    Route::middleware(['auth'])->name('admin.')->group(function () {
+        
+        Route::get('/ships', [ShipManageController::class, 'index'])->name('ships.index');
+        Route::get('/ships/{id}/edit', [ShipManageController::class, 'edit'])->name('ships.edit');
+        Route::put('/ships/{id}', [ShipManageController::class, 'update'])->name('ships.update');
+        Route::delete('/ships/{id}', [ShipManageController::class, 'destroy'])->name('ships.destroy');
+    });
 
 });

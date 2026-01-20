@@ -20,7 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     // Add your React Frontend URL here
-    'allowed_origins' => ['http://localhost:5174', 'http://localhost:5173', 'http://192.168.0.60:5173'],
+    'allowed_origins' => ['http://localhost:5174', 'http://localhost:5173', 'http://192.168.0.60:5173', 'http://www.lobby34.eu', 'https://www.lobby34.eu'],
 
     'allowed_origins_patterns' => [],
 
